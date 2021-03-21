@@ -17,8 +17,11 @@ import (
 
 // Start starts the router for the http, ws, and rtmp.
 func Start() error {
+	username := "viewer"
+	password := "changeme"
+
 	// static files
-	http.HandleFunc("/", controllers.IndexHandler)
+	http.HandleFunc("/", middleware.RequireAuth(controllers.IndexHandler, username, password))
 
 	// admin static files
 	http.HandleFunc("/admin/", middleware.RequireAdminAuth(admin.ServeAdmin))
@@ -187,6 +190,7 @@ func Start() error {
 
 	log.Infof("Web server is listening on port %d.", port)
 	log.Infoln("The web admin interface is available at /admin.")
+	log.Infof("Viewer username is %v, password is %v.", username, password)
 
 	return http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }

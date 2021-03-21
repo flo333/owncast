@@ -1,3 +1,18 @@
+Owncast v0.0.6 with very simple viewer authentication. Probably not secure, but it's good enough for me.
+
+Credentials are hardcoded in `router.go`:
+- Username: `viewer`
+- Password: `changeme`
+
+Be careful, I only tested this with the web client. If you want to stream directly, you'll have to provide the credentials in the Authentication header of your requests or in the old URL format.
+
+Compile with:
+```
+go build -a -installsuffix cgo -ldflags "-extldflags \"-static\" -s -w -X main.BuildPlatform=authMod" -o owncast
+```
+
+---
+
 <br />
 <p align="center">
   <a href="https://github.com/owncast/owncast" alt="Owncast">

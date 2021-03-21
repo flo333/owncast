@@ -9,12 +9,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// RequireAdminAuth wraps a handler requiring HTTP basic auth for it using the given
+// RequireAuth wraps a handler requiring HTTP basic auth for it using the given
 // the stream key as the password and and a hardcoded "admin" for username.
-func RequireAdminAuth(handler http.HandlerFunc) http.HandlerFunc {
+func RequireAuth(handler http.HandlerFunc, username string, password string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		username := "admin"
-		password := data.GetStreamKey()
 		realm := "Owncast Authenticated Request"
 
 		// The following line is kind of a work around.
@@ -43,6 +41,10 @@ func RequireAdminAuth(handler http.HandlerFunc) http.HandlerFunc {
 
 		handler(w, r)
 	}
+}
+
+func RequireAdminAuth(handler http.HandlerFunc) http.HandlerFunc {
+	return RequireAuth(handler, "admin", data.GetStreamKey())
 }
 
 func RequireAccessToken(scope string, handler http.HandlerFunc) http.HandlerFunc {
